@@ -1,0 +1,41 @@
+####################################################
+# Dimitri de Swart                                 #
+# Cloud Management Specialist @ VMware Netherlands #
+# https://vmguru.com/author/dimitri/               #
+####################################################
+name: K8s-Namespace
+version: 1.0
+inputs:
+  nsname:
+    type: string
+    pattern: '[a-z0-9]'
+    title: Enter Name for new Namespace
+    description: Namespace name
+  memory-limit:
+    type: string
+    enum:
+      - 256Mi
+      - 512Mi
+      - 1Gi
+      - 2Gi
+    default: 512Mi
+    title: Select Memory resource quota limit
+    description: Memory resource quota limit
+  env:
+    type: string
+    enum:
+      - prod
+      - dev
+    default: dev
+    title: Select K8s environment where to create Namespace
+    description: K8s environment
+resources:
+  Cloud_K8S_Namespace_1:
+    type: Cloud.K8S.Namespace
+    properties:
+      name: '${input.nsname}'
+      limits:
+        - limit: '${input.memory-limit}'
+          resource: memory
+      constraints:
+        - tag: 'env:${input.env}'
